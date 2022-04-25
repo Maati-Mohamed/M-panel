@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'photo',
     ];
 
     /**
@@ -41,4 +42,13 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function getImagePathAttribute()
+    {
+        return asset('photo/'.$this->photo);
+            
+    }
+    public function roles(){
+        return $this->belongsToMany(Role::class,'role_user');
+    }
 }
