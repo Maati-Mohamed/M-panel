@@ -14,8 +14,6 @@
 - Change Admin password
 - Roles and permission using policy (without any packeges) you are free to manage it to fit you requrements
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
 ### Route for admin login
     http://example.com/dasboard/login 
 
