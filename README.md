@@ -4,12 +4,12 @@
 
 ### Run the command below to setup
 
-composer install
+composer install && 
 composer dump-autoload
 
 php artisan key:generate
 
-# create and connect your database and run this command
+### create and connect your database and run this command
 php artisan migrate:fresh --seed
 
 ### Route for login
