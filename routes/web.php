@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,19 +12,13 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::group(
-    [
-        'prefix' => LaravelLocalization::setLocale(),
-        'middleware' => [ 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath' ]
-    ], function(){ 
-        Route::get('/', function () {
-            return view('welcome');
-        });
-        
-        require __DIR__.'/auth.php';
-        require __DIR__.'/dashboard/web.php';
 
-    });
+Route::get('/', function () {
+    return view('welcome');
+});
 
-  
+Route::get('home', function () {
+    return view('front.home');
+})->name('home');
 
+require __DIR__.'/dashboard/web.php';

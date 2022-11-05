@@ -2,13 +2,11 @@
 
 namespace App\Providers;
 
-use App\Models\Config;
-use App\Models\User;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
-use ConsoleTVs\Charts\Registrar as Charts;
+use Laravel\Fortify\Fortify;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,27 +25,13 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot(Charts $charts)
+    public function boot()
     {
         Paginator::useBootstrapFive();
-
-        foreach(config('abilities') as $ability => $label){
-            Gate::define($ability, function ($user) use($ability) {
-                foreach($user->roles as $role){
-                    if(in_array($ability,$role->abilities)){
-                        return true;
-                    }
-                    return false;
-                }
-                
-            });
+        
+        if(Schema::hasTable('settings')){
+            $settings = \App\Models\Setting::first();
+            View::share('settings', $settings);
         }
-        $config = Config::find(1);
-        View::share('config', $config);
-
-        $charts->register([
-            \App\Charts\SampleChart::class,
-            \App\Charts\UserChart::class
-        ]);
     }
 }

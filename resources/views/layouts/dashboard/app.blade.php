@@ -1,116 +1,181 @@
 <!DOCTYPE html>
-<html lang="en" dir="{{ App::getLocale() == 'ar' ? 'rtl' : 'ltr'; }}">
+<html lang="{{ App::getLocale() }}" dir="{{ App::getLocale() == 'ar' ? 'rtl' : 'ltr'; }}">
 
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maati | Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="{{ asset('dashboard_files/css/style.css') }}">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.2/css/bootstrap.min.css">
     @if( App::getLocale() == 'ar')
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@800&family=Amiri&family=Cairo:wght@400;500;700&family=Poppins:wght@300;400;500;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.rtl.min.css" integrity="sha384-7mQhpDl5nRA5nY9lr8F1st2NbIly/8WqhjTp+0oFxEA/QUuvlbF6M1KXezGBh3Nb" crossorigin="anonymous">
     @endif
+    <link rel="stylesheet" href="{{ asset('dashboard_files/css/style.css') }}">
+
+    <style>
+        body {
+            --main-color: {{ $settings->main_color }}
+        }
+    </style>
+    @if($settings->dark_mode == 1)
+    <style>
+        :root {
+            --color-background: #131923;
+            --color-box-background: #1c222b;
+            --color-dark: #edeffd;
+            --color-white: #202528;
+
+            --color-dark-variant: #a3bdcc;
+            --color-light: rgba(0, 0, 0, 0.4);
+            --box-shadow: 0 2rem 3rem var(--color-light);
+
+        }
+
+        body {
+            background-color: var(--color-background);
+            color: var(--color-dark);
+        }
+
+        .theme {
+            background-color: var(--color-box-background) !important;
+            color: var(--color-dark) !important;
+        }
+
+        input:focus,
+        select {
+            border: 1px solid #31344bc9;
+            outline: 1px solid #31344bc9;
+        }
+
+        input,
+        select {
+            border: 1px solid #31344bc9 !important;
+        }
+
+        .dropdown-item:focus,
+        .dropdown-item:hover {
+            background-color: var(--main-color);
+            color: var(--color-dark);
+        }
+    </style>
+    @endif
+
 </head>
 
 <body>
-    <div class="myContainer">
-        @include('layouts.dashboard.sidebar')
-        <main>
-            <div class="top">
-                <div class="menu-icon">
-                    <i class="bi bi-list"></i>
+
+    <div class="MyPage">
+        <!-- Preloader -->
+        <div class="preloader">
+            <div class="preloader-inner">
+                <div class="preloader-icon">
+                    <span></span>
+                    <span></span>
                 </div>
-                <h2>
-                    @lang('Dashboard')
-                </h2>
-                <div class="left">
-                    <div class="date">
-                        <input type="date" class="p-1" value="{{ date('Y-m-d') }}">
-                    </div>
-                    <!-- Dark mode and light mode -->
-                    <div class="theme-toggler">
-                        <i class="bi bi-brightness-high active"></i>
-                        <i class="bi bi-moon"></i>
-                    </div>
-                    <!-- Dark mode and light mode -->
-                    <x-notification-menu count="4" />
+            </div>
+        </div>
+        <!-- /End Preloader -->
+        @include('layouts.dashboard._aside')
+        <div class="MyContent">
+            <nav class="Mynav">
+                <div class="MyLogo">
+                    <span id="list-icon"><i class="bi bi-list"></i></span>
+                    <span id="nav-icon"><i class="bi bi-list"></i></span>
+                    <p class="mb-0"><span>{{ $settings->website_name }}</p>
+
+                </div>
+                <div class="MyOptions">
                     <!-- Language -->
-                    <div class="dropdown">
-                        <a class="" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-globe fs-4  ms-4"></i>
-                        </a>
+                    <div class="local">
+                        <div class="dropdown">
+                            <a class="" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-translate"></i>
+                            </a>
+                            <ul class="dropdown-menu MyBgdark" aria-labelledby="dropdownMenuButton2">
+                                @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
+                                <li class="dropdown-item ">
+                                    <a rel="alternate" class="language-text" hreflang="{{ $localeCode }}" href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}" class="Mydark">
+                                        {{ $properties['native'] }}
+                                    </a>
+                                </li>
+                                @endforeach
+                            </ul>
+                        </div>
                         <ul class="dropdown-menu MyBgdark" aria-labelledby="dropdownMenuButton2">
-                            @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
                             <li class="dropdown-item">
-                                <a rel="alternate" hreflang="{{ $localeCode }}" href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}" class="Mydark">
-                                    {{ $properties['native'] }}
-                                </a>
+
                             </li>
-                            @endforeach
                         </ul>
                     </div>
                     <!-- Language -->
-                    <!-- Admin info -->
-                    <div class="info">
-                        <p>@lang('Hey'), {{ auth()->user()->name }}</p>
-                        <small class="text-muted">@lang('Admin')</small>
+                    <li class="dropdown list-unstyled">
+
+                        <a class="" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-bell"></i></a>
+                        <ul class="dropdown-menu notification-menu">
+                            <div class="header d-flex justify-content-between">
+                                <span>@lang('Notification')</span>
+                                <a href="#" class="text-decoration-none">@lang('View All')</a>
+                            </div>
+                            <li><a class="dropdown-item d-flex gap-2 pb-3" href="#">
+                                    <div class="profile-img">
+                                        <img src="{{ asset('dashboard_files/images/logo.jpg') }}" class="" alt="user">
+                                    </div>
+                                    <div>
+                                        <p class=" my-0">Lorem ipsum dolor sit amet consectetur.
+                                        </p>
+                                        <small><i class="bi bi-alarm"></i> 5 minte ago</small>
+                                    </div>
+                                </a></li>
+
+                            <li><a class="dropdown-item d-flex gap-2" href="#">
+                                    <div class="profile-img">
+                                        <img src="{{ asset('dashboard_files/images/logo.jpg') }}" class="" alt="user">
+                                    </div>
+                                    <div>
+                                        <p class=" my-0">Lorem ipsum dolor sit amet consectetur.
+                                        </p>
+                                        <small><i class="bi bi-alarm"></i> 5 minte ago</small>
+                                    </div>
+                                </a></li>
+
+                        </ul>
+                    </li>
+                    <div class="dropdown">
+                        <div class="profile-img" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="{{ asset('dashboard_files/images/logo.jpg') }}" class="" alt="user">
+                        </div>
+                        <ul class="dropdown-menu theme profile-drop">
+                            <li><a class="dropdown-item" href="{{ route('home') }}">
+                                    <span><i class="bi bi-globe"></i></span>
+                                    @lang('View Website')
+                                </a></li>
+                            <li><a class="dropdown-item" href="{{ route('admin.profile.index') }}">
+                                    <span><i class="bi bi-person-circle"></i></span>
+                                    @lang('Profile Settings')
+                                </a></li>
+
+                            <li><a class="dropdown-item" href="{{ route('admin.change_password') }}">
+                                    <span><i class="bi bi-file-lock2"></i></span>
+                                    @lang('Change Password')
+                                </a></li>
+
+                        </ul>
                     </div>
-                    <div class="profile-photo">
-                        <a href="{{ route('dashboard.profile.index') }}" id="drop-down">
-                            <img src="{{ auth()->user()->image_path }}" alt="logo">
-                        </a>
-                    </div>
-                    <!-- Admin info -->
                 </div>
-            </div>
-            <div class="content mt-4">
+            </nav>
+
+            <div class="main-content p-3">
                 @include('sweetalert::alert')
-                @include('layouts.dashboard._error-message')
-                @include('layouts.dashboard._flash-messages')
                 @yield('content')
             </div>
-        </main>
+        </div>
     </div>
-    <!-- <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
 
-    <script>
-        const userId = "{{ Auth::user()->id }}";
-    </script>
-    <script src="{{ asset('js/app.js') }}"></script>
-    <script src="sweetalert2.all.min.js"></script>
-    <script src="sweetalert2.all.min.js"></script>
-    <!-- Charting library -->
-    <script src="https://unpkg.com/echarts/dist/echarts.min.js"></script>
-    <!-- Chartisan -->
-    <script src="https://unpkg.com/@chartisan/echarts/dist/chartisan_echarts.js"></script>
-    <script>
-          const chart = new Chartisan({
-            el: '#chart',
-            url: "@chart('sample_chart')", 
-            hooks: new ChartisanHooks()
-                .colors(['#ffbb55', '#7380ec'])
-                .datasets([{
-                    type: 'bar',
-                    fill: false,
-                }, 'bar']), 
-          });
-          const chart_two = new Chartisan({
-            el: '#chart_two',
-            url: "@chart('user_chart')", 
-            hooks: new ChartisanHooks()
-                .colors(['#7380ec', '#ffbb55'])
-                .datasets([{
-                    type: 'pie',
-                    fill: false,
-                }]), 
-          });
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.2/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="{{ asset('dashboard_files/js/main.js') }}"></script>
+
 
 </body>
 

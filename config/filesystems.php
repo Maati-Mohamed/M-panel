@@ -43,9 +43,10 @@ return [
             'visibility' => 'public',
             'throw' => false,
         ],
-        'public_path' => [
+
+        'upload' => [
             'driver' => 'local',
-            'root' => public_path('photo'),
+            'root' => public_path('images'),
             'visibility' => 'public',
             'throw' => false,
         ],

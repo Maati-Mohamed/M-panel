@@ -1,39 +1,27 @@
 <?php
 
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\AdminAuth\PasswordResetLinkController;
-use App\Http\Controllers\AdminAuth\NewPasswordController;
-use App\Http\Controllers\Dashboard\AdminController;
-use App\Http\Controllers\Dashboard\AdminProfileController;
-use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Dashboard\AdminControlller;
+use App\Http\Controllers\Dashboard\ProfileController;
 use App\Http\Controllers\Dashboard\UserController;
-use App\Http\Controllers\Dashboard\ConfigController;
-use App\Http\Controllers\Dashboard\RoleController;
+use App\Http\Controllers\SettingController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Dashboard\RoleController;
 
-/*
-|--------------------------------------------------------------------------
-| Dashboard Web Routes
-|-------------------------------------------------------------------------
-|
-*/
 Route::group([
-        'prefix' => 'dashboard',
-        'as'     => 'dashboard.',
-        'middleware' => ['auth:admin']
-    ],function(){
-        Route::get('/', [DashboardController::class, 'index'])->name('index');
-        Route::resource('profile', AdminProfileController::class)->only(['index','edit','update']);
-        Route::resource('users', UserController::class);
-        Route::resource('admins', AdminController::class);
-        Route::resource('configs', ConfigController::class)->only(['index', 'edit','update']);
-        Route::put('password', [ConfigController::class, 'change_password'])->name('change');
+    'prefix' => LaravelLocalization::setLocale(),
+	'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath' ]
+],function(){
+
+    Route::prefix('admin')->middleware(['auth'])->name('admin.')->group(function () {
+
+        Route::get('/dashboard', [AdminControlller::class, 'index'])->name('dashboard');
+        
+        Route::resource('settings', SettingController::class)->only(['index','update']);
+        Route::resource('profile', ProfileController::class)->only(['index','edit','update']);
         Route::resource('roles', RoleController::class);
+        Route::resource('users', UserController::class);
+        Route::get('password', [UserController::class, 'password'])->name('change_password');
+        Route::put('password', [UserController::class, 'change_password'])->name('change_password');
+
     });
-
-require __DIR__.'/auth.php';
-
-
-
-
-   
+});
