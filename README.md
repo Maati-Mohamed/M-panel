@@ -1,5 +1,5 @@
 
-## M-panel 
+### M-panel 
 
  Small admin panel using laravel ^9.
  You are free to use it 
@@ -10,7 +10,7 @@
 - Admins management && users management
 - If you wanna to use it for controll your websit, I provide an interface to manage your website configs like website name,website colors, logo, phone ..etc
 - Notification system
-- Admin Profile
+- Admin Profile 
 - Change Admin password
 - Roles and permission using policy (without any packeges) you are free to manage it to fit you requrements
 
